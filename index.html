@@ -139,141 +139,214 @@
     </div>
 
     <!-- COMPACT TOP NAVIGATION BAR (Optimized for P30 Pro Landscape) -->
-    <header class="relative z-20 bg-white/95 backdrop-blur-md border-b-4 border-sky-300 px-3 py-1.5 shadow-sm">
-        <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
-            <!-- Left: Home & Title -->
-            <div class="flex items-center gap-2">
-                <button onclick="goHome()" id="btn-home" class="btn-toy bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-3 py-1 rounded-xl flex items-center gap-1.5 border-2 border-amber-600 text-sm sm:text-base">
-                    <i class="fa-solid fa-house"></i>
-                    <span>หน้าแรก</span>
-                </button>
-                <div class="flex items-center gap-1.5 bg-sky-100 px-2.5 py-1 rounded-xl border-2 border-sky-300">
-                    <span class="text-lg sm:text-xl">🦉</span>
-                    <span class="font-bold text-sky-900 text-xs sm:text-base tracking-wide">คณิตคิดสนุก</span>
+    <header class="relative z-20 bg-white/95 backdrop-blur-md border-b-4 border-sky-300 px-2 sm:px-3 py-1 shadow-sm">
+        <div class="max-w-6xl mx-auto flex flex-col gap-1">
+            <!-- Top Row: Home, Title, Score & Audio Controls -->
+            <div class="flex items-center justify-between gap-1.5">
+                <!-- Left: Home & Title -->
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goHome()" id="btn-home" class="btn-toy bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-2.5 py-1 rounded-xl flex items-center gap-1 border-2 border-amber-600 text-xs sm:text-sm">
+                        <i class="fa-solid fa-house"></i>
+                        <span>หน้าแรก</span>
+                    </button>
+                    <div class="hidden sm:flex items-center gap-1 bg-sky-100 px-2.5 py-0.5 rounded-xl border-2 border-sky-300">
+                        <span class="text-base">🦉</span>
+                        <span class="font-bold text-sky-900 text-xs sm:text-sm tracking-wide">คณิตคิดสนุก</span>
+                    </div>
+                </div>
+
+                <!-- Right: Stars Counter, Reset Score & Audio Controls -->
+                <div class="flex items-center gap-1 sm:gap-1.5">
+                    <!-- Trophy Display Badge (Unlocks at 50, 100, 150 points) -->
+                    <div id="trophy-bar" onclick="showTrophyInfo()" title="ถ้วยรางวัลสะสม (50 / 100 / 150 คะแนน)" class="cursor-pointer bg-amber-100 border-2 border-amber-500 px-2 py-0.5 rounded-xl flex items-center gap-1 shadow-inner">
+                        <span id="trophy-icons" class="text-sm sm:text-base tracking-tighter opacity-40">🏆</span>
+                        <span id="trophy-level-text" class="text-[10px] sm:text-xs font-extrabold text-amber-900 hidden md:inline">0/50</span>
+                    </div>
+
+                    <!-- Star Score + Reset Score Button -->
+                    <div class="bg-yellow-100 border-2 border-yellow-400 px-2 py-0.5 rounded-xl flex items-center gap-1 shadow-inner">
+                        <span class="text-sm sm:text-base animate-bounce">⭐</span>
+                        <span id="star-count" class="font-bold text-sm sm:text-lg text-yellow-800">0</span>
+                        <span class="text-[10px] font-bold text-yellow-700 hidden sm:inline">คะแนน</span>
+                        <button onclick="resetTotalScore()" title="รีเซ็ตคะแนนสะสมเป็น 0" class="ml-0.5 text-[10px] bg-rose-100 hover:bg-rose-200 text-rose-700 border border-rose-300 rounded px-1 py-0.2 font-bold">
+                            0🔄
+                        </button>
+                    </div>
+
+                    <!-- Test Milestone Dev Button (Optional quick helper for parents) -->
+                    <button onclick="addBonusScoreForParent()" title="ปุ่มผู้ปกครอง: เพิ่มทีละ +10 คะแนนเพื่อทดสอบถ้วยรางวัล" class="btn-toy bg-amber-200 hover:bg-amber-300 text-amber-900 px-1.5 h-8 rounded-xl flex items-center justify-center border-2 border-amber-400 text-[10px] font-bold">
+                        +10⭐
+                    </button>
+
+                    <!-- Voice Prompt Repeat Button -->
+                    <button onclick="repeatCurrentSpeech()" title="ฟังเสียงพูดอีกครั้ง" class="btn-toy bg-purple-500 hover:bg-purple-600 text-white px-2 h-8 rounded-xl flex items-center justify-center gap-1 border-2 border-purple-700 text-xs font-bold">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span class="hidden sm:inline">ฟังซ้ำ</span>
+                    </button>
+
+                    <!-- Sound Effects Toggle -->
+                    <button onclick="toggleSFX()" id="btn-sfx" title="เปิด/ปิดเสียงเอฟเฟกต์" class="btn-toy bg-emerald-500 hover:bg-emerald-600 text-white w-8 h-8 rounded-xl flex items-center justify-center border-2 border-emerald-700 text-xs">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+
+                    <!-- Background Music Toggle -->
+                    <button onclick="toggleBGM()" id="btn-bgm" title="เปิด/ปิดเพลงประกอบ" class="btn-toy bg-pink-500 hover:bg-pink-600 text-white px-2 h-8 rounded-xl flex items-center justify-center gap-1 border-2 border-pink-700 text-xs font-bold">
+                        <i class="fa-solid fa-music"></i>
+                        <span id="bgm-label" class="hidden md:inline">เปิดเพลง</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Right: Stars Counter & Audio Controls -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <!-- Star Score -->
-                <div class="bg-yellow-100 border-2 border-yellow-400 px-3 py-0.5 rounded-xl flex items-center gap-1.5 shadow-inner">
-                    <span class="text-lg sm:text-xl animate-bounce">⭐</span>
-                    <span id="star-count" class="font-bold text-base sm:text-xl text-yellow-800">0</span>
-                </div>
-
-                <!-- Voice Prompt Repeat Button -->
-                <button onclick="repeatCurrentSpeech()" title="ฟังเสียงพูดอีกครั้ง" class="btn-toy bg-purple-500 hover:bg-purple-600 text-white px-2.5 h-9 rounded-xl flex items-center justify-center gap-1 border-2 border-purple-700 text-xs sm:text-sm font-bold">
-                    <i class="fa-solid fa-volume-high"></i>
-                    <span class="hidden sm:inline">ฟังซ้ำ</span>
+            <!-- Second Row: Quick Stage Switcher Tabs (Jump to any stage 1-7 directly!) -->
+            <div id="top-stage-tabs" class="flex items-center gap-1 overflow-x-auto py-0.5 no-scrollbar">
+                <button onclick="startStage(1)" id="nav-tab-1" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-amber-100">
+                    1. 🧱 นับบล็อก
                 </button>
-
-                <!-- Sound Effects Toggle -->
-                <button onclick="toggleSFX()" id="btn-sfx" title="เปิด/ปิดเสียงเอฟเฟกต์" class="btn-toy bg-emerald-500 hover:bg-emerald-600 text-white w-9 h-9 rounded-xl flex items-center justify-center border-2 border-emerald-700 text-sm">
-                    <i class="fa-solid fa-bell"></i>
+                <button onclick="startStage(2)" id="nav-tab-2" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-indigo-100">
+                    2. 🔢 ทายตัวเลข
                 </button>
-
-                <!-- Background Music Toggle -->
-                <button onclick="toggleBGM()" id="btn-bgm" title="เปิด/ปิดเพลงประกอบ" class="btn-toy bg-pink-500 hover:bg-pink-600 text-white px-2.5 h-9 rounded-xl flex items-center justify-center gap-1 border-2 border-pink-700 text-xs font-bold">
-                    <i class="fa-solid fa-music"></i>
-                    <span id="bgm-label" class="hidden md:inline">เพลง</span>
+                <button onclick="startStage(3)" id="nav-tab-3" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-emerald-100">
+                    3. 🍎 บวกเลข (+)
+                </button>
+                <button onclick="startStage(4)" id="nav-tab-4" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-rose-100">
+                    4. 🧁 ลบเลข (-)
+                </button>
+                <button onclick="startStage(5)" id="nav-tab-5" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-purple-100">
+                    5. 🐊 มากกว่า/น้อยกว่า
+                </button>
+                <button onclick="startStage(6)" id="nav-tab-6" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-teal-100">
+                    6. 👛 กระเป๋าตังค์
+                </button>
+                <button onclick="startStage(7)" id="nav-tab-7" class="stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-cyan-100">
+                    7. 💴 ทายเงิน
                 </button>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-2 sm:px-4 py-2 max-w-6xl w-full mx-auto">
+    <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 max-w-6xl w-full mx-auto">
 
         <!-- ==========================================
-             SCREEN 0: MAIN MENU (Horizontal Landscape Ready - 5 Stages)
+             SCREEN 0: MAIN MENU (Sequential 1 to 7 Stages)
              ========================================== -->
         <section id="screen-menu" class="w-full flex flex-col items-center text-center my-auto">
             <div class="mb-2">
-                <div class="inline-block bg-white/95 px-5 py-1 rounded-2xl border-4 border-sky-400 shadow-md mb-1">
-                    <h1 class="text-lg sm:text-2xl font-bold text-sky-600">
-                        🌈 ผจญภัยโลกตัวเลขทั้ง 5 ด่าน 🎈
+                <div class="inline-block bg-white/95 px-4 py-1 rounded-2xl border-4 border-sky-400 shadow-md mb-0.5">
+                    <h1 class="text-base sm:text-xl font-bold text-sky-600">
+                        🌈 ผจญภัยโลกตัวเลข & ตอบโจทย์สะสมถ้วยรางวัล (ด่าน 1 - 7) 🏆
                     </h1>
                 </div>
-                <p class="text-sky-900 font-semibold text-xs sm:text-sm block">
-                    เลือกด่านที่หนูๆ อยากเล่นได้เลยจ้า! (ออกแบบสำหรับแนวนอนบนมือถือ Huawei P30 Pro)
+                <p class="text-sky-900 font-semibold text-[11px] sm:text-xs block">
+                    ตอบถูกข้อละ <strong>+1 คะแนน</strong> • ครบ <strong>50 ได้ 🏆</strong> • ครบ <strong>100 ได้ 🏆🏆 (พลุ x2)</strong> • ครบ <strong>150 ได้ 🏆🏆🏆 (พลุ x3)</strong>
                 </p>
             </div>
 
-            <!-- 5 Stage Cards in 5-Column Horizontal Row -->
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-2.5 w-full max-w-6xl px-1">
+            <!-- Sequential Grid of Stages 1 to 7 -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 w-full max-w-6xl px-1">
                 
-                <!-- Stage 1 Card -->
-                <div onclick="startStage(1)" class="btn-toy cursor-pointer bg-gradient-to-b from-amber-100 to-amber-200 border-4 border-amber-400 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-between text-center hover:scale-[1.01] transition-transform">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl border-2 border-amber-400 flex items-center justify-center text-xl sm:text-2xl shadow-inner mb-1">
+                <!-- Stage 1 Card: Place Value Blocks -->
+                <div onclick="startStage(1)" class="btn-toy cursor-pointer bg-gradient-to-b from-amber-100 to-amber-200 border-4 border-amber-400 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-amber-400 flex items-center justify-center text-xl shadow-inner mb-1">
                         🧱
                     </div>
                     <div>
                         <span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 1</span>
-                        <h2 class="text-xs sm:text-base font-bold text-amber-950 mt-0.5">นับเลข & หลักเลข</h2>
-                        <p class="text-amber-800 text-[10px] sm:text-xs mt-0.5 line-clamp-2">เข้าใจหลักหน่วย สิบ (10) ร้อย (100) พัน (1000)</p>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-950 mt-1">นับเลข & หลักเลข</h2>
+                        <p class="text-amber-800 text-[10px] line-clamp-1">หน่วย สิบ ร้อย พัน</p>
                     </div>
-                    <div class="mt-1.5 w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-1 sm:py-1.5 rounded-xl border-2 border-amber-700 shadow flex items-center justify-center gap-1 text-xs">
+                    <div class="mt-1.5 w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-1 rounded-xl border-2 border-amber-700 shadow flex items-center justify-center gap-1 text-[11px]">
                         <i class="fa-solid fa-play"></i> เล่นด่าน 1
                     </div>
                 </div>
 
-                <!-- Stage 2 Card -->
-                <div onclick="startStage(2)" class="btn-toy cursor-pointer bg-gradient-to-b from-emerald-100 to-emerald-200 border-4 border-emerald-400 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-between text-center hover:scale-[1.01] transition-transform">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl border-2 border-emerald-400 flex items-center justify-center text-xl sm:text-2xl shadow-inner mb-1">
-                        🍎➕
+                <!-- Stage 2 Card: Number Reading & Reveal (Up to 100,000) -->
+                <div onclick="startStage(2)" class="btn-toy cursor-pointer bg-gradient-to-b from-indigo-100 to-indigo-200 border-4 border-indigo-400 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-indigo-400 flex items-center justify-center text-xl shadow-inner mb-1">
+                        🔢🔊
                     </div>
                     <div>
-                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 2</span>
-                        <h2 class="text-xs sm:text-base font-bold text-emerald-950 mt-0.5">การบวกเลข (+)</h2>
-                        <p class="text-emerald-800 text-[10px] sm:text-xs mt-0.5 line-clamp-2">รวมสิ่งของน่ารักๆ เข้าด้วยกันทั้งหมดเท่าไหร่เอ่ย?</p>
+                        <span class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 2</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-1">ทายจำนวนตัวเลข</h2>
+                        <p class="text-indigo-800 text-[10px] line-clamp-1">ตั้งหลักได้ถึง 100,000</p>
                     </div>
-                    <div class="mt-1.5 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 sm:py-1.5 rounded-xl border-2 border-emerald-700 shadow flex items-center justify-center gap-1 text-xs">
+                    <div class="mt-1.5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 rounded-xl border-2 border-indigo-800 shadow flex items-center justify-center gap-1 text-[11px]">
                         <i class="fa-solid fa-play"></i> เล่นด่าน 2
                     </div>
                 </div>
 
-                <!-- Stage 3 Card -->
-                <div onclick="startStage(3)" class="btn-toy cursor-pointer bg-gradient-to-b from-rose-100 to-rose-200 border-4 border-rose-400 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-between text-center hover:scale-[1.01] transition-transform">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl border-2 border-rose-400 flex items-center justify-center text-xl sm:text-2xl shadow-inner mb-1">
-                        🧁➖
+                <!-- Stage 3 Card: Addition (+) -->
+                <div onclick="startStage(3)" class="btn-toy cursor-pointer bg-gradient-to-b from-emerald-100 to-emerald-200 border-4 border-emerald-400 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-emerald-400 flex items-center justify-center text-xl shadow-inner mb-1">
+                        🍎➕
                     </div>
                     <div>
-                        <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 3</span>
-                        <h2 class="text-xs sm:text-base font-bold text-rose-950 mt-0.5">การลบเลข (-)</h2>
-                        <p class="text-rose-800 text-[10px] sm:text-xs mt-0.5 line-clamp-2">หักออกหรือเอาออกไป แล้วนับว่าเหลือกี่ชิ้นนะ?</p>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 3</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-emerald-950 mt-1">การบวกเลข (+)</h2>
+                        <p class="text-emerald-800 text-[10px] line-clamp-1">รวมสิ่งของเข้าด้วยกัน</p>
                     </div>
-                    <div class="mt-1.5 w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-1 sm:py-1.5 rounded-xl border-2 border-rose-700 shadow flex items-center justify-center gap-1 text-xs">
+                    <div class="mt-1.5 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 rounded-xl border-2 border-emerald-700 shadow flex items-center justify-center gap-1 text-[11px]">
                         <i class="fa-solid fa-play"></i> เล่นด่าน 3
                     </div>
                 </div>
 
-                <!-- Stage 4 Card: Compare (> < =) -->
-                <div onclick="startStage(4)" class="btn-toy cursor-pointer bg-gradient-to-b from-purple-100 to-purple-200 border-4 border-purple-400 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-between text-center hover:scale-[1.01] transition-transform">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl border-2 border-purple-400 flex items-center justify-center text-xl sm:text-2xl shadow-inner mb-1">
-                        🐊⚖️
+                <!-- Stage 4 Card: Subtraction (-) -->
+                <div onclick="startStage(4)" class="btn-toy cursor-pointer bg-gradient-to-b from-rose-100 to-rose-200 border-4 border-rose-400 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-rose-400 flex items-center justify-center text-xl shadow-inner mb-1">
+                        🧁➖
                     </div>
                     <div>
-                        <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 4</span>
-                        <h2 class="text-xs sm:text-base font-bold text-purple-950 mt-0.5">มากกว่า น้อยกว่า</h2>
-                        <p class="text-purple-800 text-[10px] sm:text-xs mt-0.5 line-clamp-2">เปรียบเทียบจำนวน มากกว่า (&gt;) น้อยกว่า (&lt;) เท่ากับ (=)</p>
+                        <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 4</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-rose-950 mt-1">การลบเลข (-)</h2>
+                        <p class="text-rose-800 text-[10px] line-clamp-1">หักออกแล้วเหลือกี่ชิ้น</p>
                     </div>
-                    <div class="mt-1.5 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-1 sm:py-1.5 rounded-xl border-2 border-purple-800 shadow flex items-center justify-center gap-1 text-xs">
+                    <div class="mt-1.5 w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-1 rounded-xl border-2 border-rose-700 shadow flex items-center justify-center gap-1 text-[11px]">
                         <i class="fa-solid fa-play"></i> เล่นด่าน 4
                     </div>
                 </div>
 
-                <!-- Stage 5 Card: Thai Money & Change -->
-                <div onclick="startStage(5)" class="btn-toy cursor-pointer bg-gradient-to-b from-sky-100 to-teal-200 border-4 border-teal-500 rounded-2xl p-2 sm:p-3 flex flex-col items-center justify-between text-center hover:scale-[1.01] transition-transform col-span-2 sm:col-span-1">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl border-2 border-teal-500 flex items-center justify-center text-xl sm:text-2xl shadow-inner mb-1">
+                <!-- Stage 5 Card: Compare (> < =) -->
+                <div onclick="startStage(5)" class="btn-toy cursor-pointer bg-gradient-to-b from-purple-100 to-purple-200 border-4 border-purple-400 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-purple-400 flex items-center justify-center text-xl shadow-inner mb-1">
+                        🐊⚖️
+                    </div>
+                    <div>
+                        <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 5</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-purple-950 mt-1">มากกว่า น้อยกว่า</h2>
+                        <p class="text-purple-800 text-[10px] line-clamp-1">เปรียบเทียบ &gt; &lt; =</p>
+                    </div>
+                    <div class="mt-1.5 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-1 rounded-xl border-2 border-purple-800 shadow flex items-center justify-center gap-1 text-[11px]">
+                        <i class="fa-solid fa-play"></i> เล่นด่าน 5
+                    </div>
+                </div>
+
+                <!-- Stage 6 Card: Thai Money Wallet & Change -->
+                <div onclick="startStage(6)" class="btn-toy cursor-pointer bg-gradient-to-b from-sky-100 to-teal-200 border-4 border-teal-500 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-teal-500 flex items-center justify-center text-xl shadow-inner mb-1">
+                        👛🛒
+                    </div>
+                    <div>
+                        <span class="bg-teal-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 6</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-teal-950 mt-1">กระเป๋าตังค์ & ทอนเงิน</h2>
+                        <p class="text-teal-800 text-[10px] line-clamp-1">ได้รับเพิ่ม (+) เงินทอน (-)</p>
+                    </div>
+                    <div class="mt-1.5 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-1 rounded-xl border-2 border-teal-800 shadow flex items-center justify-center gap-1 text-[11px]">
+                        <i class="fa-solid fa-play"></i> เล่นด่าน 6
+                    </div>
+                </div>
+
+                <!-- Stage 7 Card: Count Banknotes & Coins Quiz -->
+                <div onclick="startStage(7)" class="btn-toy cursor-pointer bg-gradient-to-b from-cyan-100 to-emerald-200 border-4 border-cyan-500 rounded-2xl p-2 flex flex-col items-center justify-between text-center hover:scale-[1.02] transition-transform col-span-2 sm:col-span-1">
+                    <div class="w-10 h-10 bg-white rounded-xl border-2 border-cyan-500 flex items-center justify-center text-xl shadow-inner mb-1">
                         💴🪙
                     </div>
                     <div>
-                        <span class="bg-teal-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 5</span>
-                        <h2 class="text-xs sm:text-base font-bold text-teal-950 mt-0.5">ธนบัตร & เหรียญไทย</h2>
-                        <p class="text-teal-800 text-[10px] sm:text-xs mt-0.5 line-clamp-2">รู้จักเงินไทย ได้รับเพิ่ม (+) เงินทอน (-) คงเหลือ</p>
+                        <span class="bg-cyan-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ด่านที่ 7</span>
+                        <h2 class="text-xs sm:text-sm font-extrabold text-cyan-950 mt-1">ทายจำนวนเงิน</h2>
+                        <p class="text-cyan-800 text-[10px] line-clamp-1">ดูภาพแบงก์ & เหรียญ</p>
                     </div>
-                    <div class="mt-1.5 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-1 sm:py-1.5 rounded-xl border-2 border-teal-800 shadow flex items-center justify-center gap-1 text-xs">
-                        <i class="fa-solid fa-play"></i> เล่นด่าน 5
+                    <div class="mt-1.5 w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 rounded-xl border-2 border-cyan-800 shadow flex items-center justify-center gap-1 text-[11px]">
+                        <i class="fa-solid fa-play"></i> เล่นด่าน 7
                     </div>
                 </div>
 
@@ -287,15 +360,19 @@
         <section id="screen-stage1" class="hidden w-full flex-col gap-2">
             
             <!-- COMPACT TOP CONTROL & SUMMARY BAR -->
-            <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white rounded-2xl p-2 sm:p-3 border-2 border-white shadow-md flex flex-wrap items-center justify-between gap-2">
+            <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white rounded-2xl p-2 sm:p-2.5 border-2 border-white shadow-md flex flex-wrap items-center justify-between gap-2">
                 
-                <!-- Left: Mode Switcher Buttons -->
+                <!-- Left: Mode Switcher Buttons + Reset 0 Button -->
                 <div class="flex items-center gap-1.5">
-                    <button id="tab-s1-explore" onclick="setStage1Mode('explore')" class="btn-toy bg-amber-400 text-amber-950 font-bold px-3 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1">
-                        <span>🔍 โหมดฝึกนับบล็อก</span>
+                    <button id="tab-s1-explore" onclick="setStage1Mode('explore')" class="btn-toy bg-amber-400 text-amber-950 font-bold px-2.5 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1">
+                        <span>🔍 ฝึกนับบล็อก</span>
                     </button>
-                    <button id="tab-s1-quiz" onclick="setStage1Mode('quiz')" class="btn-toy bg-white/90 text-slate-700 font-bold px-3 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1">
-                        <span>🎯 โหมดทายตัวเลข</span>
+                    <button id="tab-s1-quiz" onclick="setStage1Mode('quiz')" class="btn-toy bg-white/90 text-slate-700 font-bold px-2.5 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1">
+                        <span>🎯 ทายบล็อก</span>
+                    </button>
+                    <button id="btn-s1-reset" onclick="resetStage1Blocks()" class="btn-toy bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1.5 rounded-xl border-2 border-rose-700 text-xs sm:text-sm flex items-center gap-1" title="รีเซ็ตทุกหลักเป็น 0">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>รีเซ็ต 0</span>
                     </button>
                 </div>
 
@@ -576,7 +653,7 @@
                 <div class="flex items-center gap-2">
                     <span class="text-2xl sm:text-3xl">🐊</span>
                     <div>
-                        <h2 class="text-base sm:text-xl font-bold text-purple-950 leading-tight">ด่านที่ 4: เปรียบเทียบ มากกว่า (&gt;) น้อยกว่า (&lt;) เท่ากับ (=)</h2>
+                        <h2 class="text-base sm:text-xl font-bold text-purple-950 leading-tight">ด่านที่ 5: เปรียบเทียบ มากกว่า (&gt;) น้อยกว่า (&lt;) เท่ากับ (=)</h2>
                         <p class="text-[11px] sm:text-xs text-purple-700">จำง่ายๆ: ปากจระเข้จะอ้าไปหาฝั่งที่มีจำนวนมากกว่าเสมอจ้า!</p>
                     </div>
                 </div>
@@ -587,6 +664,9 @@
                     </button>
                     <button onclick="setCompareLevel('medium')" id="comp-lvl-medium" class="px-2.5 py-1 rounded-lg font-bold text-xs text-slate-600 hover:bg-white">
                         🚀 หลักสิบ/ร้อย (10-500)
+                    </button>
+                    <button onclick="generateCompareQuestion()" class="px-2 py-1 rounded-lg font-bold text-xs bg-amber-400 text-amber-950 hover:bg-amber-500">
+                        🔄 สุ่มโจทย์ใหม่
                     </button>
                 </div>
             </div>
@@ -663,16 +743,16 @@
                     </button>
                 </div>
 
-                <!-- Wallet Balance Display (For Wallet Mode) -->
+                    <!-- Wallet Balance Display (For Wallet Mode) -->
                 <div id="s5-wallet-summary" class="flex items-center gap-2 bg-white/15 px-3 py-1 rounded-xl border border-white/30">
                     <div class="bg-white text-teal-900 px-3 py-0.5 rounded-lg border-2 border-amber-300 font-extrabold text-lg sm:text-2xl">
                         <span id="s5-total-baht">0</span> บาท
                     </div>
                     <button onclick="speakWalletTotal()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-2 py-1 rounded-lg text-xs border border-amber-600">
-                        <i class="fa-solid fa-volume-high"></i> อ่านจำนวนเงิน
+                        <i class="fa-solid fa-volume-high"></i> อ่านเงิน
                     </button>
-                    <button onclick="clearWallet()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-2 py-1 rounded-lg text-xs border border-rose-700">
-                        🗑️ ล้างกระเป๋า
+                    <button onclick="clearWallet()" class="btn-toy bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs border border-rose-700 flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> รีเซ็ต 0 บาท
                     </button>
                 </div>
             </div>
@@ -761,7 +841,161 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             SCREEN 6 (NOW STAGE 2): NUMBER CHALLENGE UP TO 100,000
+             Parent Digit Selector + Reveal Audio Button + Auto-Advance
+             ========================================== -->
+        <section id="screen-stage6" class="hidden w-full max-w-5xl flex-col gap-2">
+            <!-- Parent Control Header Bar -->
+            <div class="bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-600 text-white rounded-2xl p-2 sm:p-2.5 border-2 border-white shadow-md flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl sm:text-3xl">🔢</span>
+                    <div>
+                        <h2 class="text-sm sm:text-lg font-extrabold leading-tight">ด่านที่ 2: ทายจำนวนตัวเลข & กดปุ่มเฉลยฟังเสียง</h2>
+                        <p class="text-[10px] sm:text-xs text-sky-100">ตอบถูกได้ +1 คะแนน และขึ้นข้อใหม่อัตโนมัติ • ครบ 50 / 100 / 150 รับถ้วยรางวัล 🏆</p>
+                    </div>
+                </div>
+
+                <!-- Parent Digit Range Selector (10 to 100,000) -->
+                <div class="flex flex-wrap items-center gap-1 bg-black/25 p-1 rounded-xl border border-white/25">
+                    <span class="text-[10px] sm:text-xs font-bold px-1.5 text-amber-300">👨‍👩‍👧 เลือกหลัก:</span>
+                    <button onclick="setStage6MaxPlace(10)" id="s6-place-10" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-amber-400 text-amber-950 shadow">หลักสิบ (10)</button>
+                    <button onclick="setStage6MaxPlace(100)" id="s6-place-100" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักร้อย (100)</button>
+                    <button onclick="setStage6MaxPlace(1000)" id="s6-place-1000" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักพัน (1,000)</button>
+                    <button onclick="setStage6MaxPlace(10000)" id="s6-place-10000" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักหมื่น (10,000)</button>
+                    <button onclick="setStage6MaxPlace(100000)" id="s6-place-100000" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักแสน (100,000)</button>
+                </div>
+            </div>
+
+            <!-- Main Number Display & Audio Reveal Arena -->
+            <div class="bg-white/95 rounded-2xl p-3 sm:p-4 border-4 border-indigo-400 shadow-lg flex flex-col gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                    
+                    <!-- Big Color-Coded Number Card (7 cols) -->
+                    <div class="md:col-span-7 bg-gradient-to-b from-indigo-50 to-sky-50 border-4 border-indigo-200 rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center min-h-[125px] sm:min-h-[145px] shadow-inner relative">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-3 py-0.5 rounded-full mb-1">ตัวเลขนี้คือจำนวนเท่าไหร่เอ่ย?</span>
+                        <div id="s6-big-number" class="text-4xl sm:text-6xl font-extrabold tracking-wider text-indigo-900 my-1 select-all">
+                            125
+                        </div>
+                        <!-- Place Value Breakdown Pills -->
+                        <div id="s6-place-pills" class="flex flex-wrap items-center justify-center gap-1 mt-1">
+                        </div>
+                    </div>
+
+                    <!-- Kid's Reveal & Listen Button Panel (5 cols) -->
+                    <div class="md:col-span-5 flex flex-col items-center justify-center gap-2 bg-amber-50 border-3 border-amber-300 rounded-2xl p-3 h-full">
+                        <button onclick="revealStage6NumberSpeech()" class="btn-toy w-full bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-amber-950 font-extrabold py-3 px-4 rounded-2xl border-3 border-amber-600 shadow-lg flex items-center justify-center gap-2.5 text-base sm:text-xl">
+                            <i class="fa-solid fa-volume-high text-2xl animate-pulse"></i>
+                            <span>กดเฉลย / ฟังเสียงอ่าน</span>
+                        </button>
+
+                        <!-- Revealed Thai Words Box -->
+                        <div id="s6-reveal-box" class="w-full bg-white border-2 border-dashed border-amber-400 rounded-xl py-2 px-3 text-center">
+                            <span class="text-xs text-slate-400 font-bold block">คำอ่านภาษาไทย:</span>
+                            <span id="s6-reveal-text" class="text-sm sm:text-lg font-extrabold text-indigo-700">❓ กดปุ่มด้านบนเพื่อฟังเสียงเฉลยจ้า</span>
+                        </div>
+
+                        <div class="flex items-center justify-between w-full text-[11px] text-amber-900 font-bold px-1">
+                            <span id="s6-auto-status">⚡ ตอบถูกไปข้อต่อไปอัตโนมัติ</span>
+                            <button onclick="generateStage6Question()" class="text-indigo-600 hover:underline font-extrabold">🔄 ข้ามข้อนี้</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4 Answer Choices (Thai Reading + Number Verification) -->
+                <div id="s6-choices-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 w-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SCREEN 7: BANKNOTES & COINS COUNTING QUIZ
+             Parent Digit Selector + Visual Bills/Coins + Auto-Advance
+             ========================================== -->
+        <section id="screen-stage7" class="hidden w-full max-w-5xl flex-col gap-2">
+            <!-- Parent Control Header Bar -->
+            <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-2xl p-2 sm:p-2.5 border-2 border-white shadow-md flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl sm:text-3xl">💴🪙</span>
+                    <div>
+                        <h2 class="text-sm sm:text-lg font-extrabold leading-tight">ด่านที่ 7: ทายจำนวนเงินจากภาพธนบัตรและเหรียญ</h2>
+                        <p class="text-[10px] sm:text-xs text-emerald-100">จิ้มที่แบงก์หรือเหรียญเพื่อฟังเสียง • ตอบแล้วขึ้นข้อใหม่อัตโนมัติ</p>
+                    </div>
+                </div>
+
+                <!-- Parent Money Range Selector -->
+                <div class="flex flex-wrap items-center gap-1 bg-black/25 p-1 rounded-xl border border-white/25">
+                    <span class="text-[10px] sm:text-xs font-bold px-1.5 text-amber-300">👨‍👩‍👧 ผู้ปกครองเลือกหลักเงิน:</span>
+                    <button onclick="setStage7MaxRange(10)" id="s7-range-10" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">เหรียญ (ไม่เกิน 20฿)</button>
+                    <button onclick="setStage7MaxRange(100)" id="s7-range-100" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-amber-400 text-amber-950 shadow">หลักสิบ/ร้อย (ไม่เกิน 500฿)</button>
+                    <button onclick="setStage7MaxRange(1000)" id="s7-range-1000" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักพัน (ไม่เกิน 5,000฿)</button>
+                    <button onclick="setStage7MaxRange(10000)" id="s7-range-10000" class="px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30">หลักหมื่น (ไม่เกิน 20,000฿)</button>
+                </div>
+            </div>
+
+            <!-- Visual Banknotes & Coins Arena -->
+            <div class="bg-white/95 rounded-2xl p-3 sm:p-4 border-4 border-emerald-400 shadow-lg flex flex-col gap-2.5">
+                
+                <!-- Top Prompt & Audio Reveal Button -->
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-emerald-50 border-2 border-emerald-200 rounded-xl px-3 py-1.5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">👛</span>
+                        <span id="s7-prompt-text" class="text-xs sm:text-base font-extrabold text-emerald-950">นับธนบัตรและเหรียญในกรอบด้านล่างว่ามีทั้งหมดกี่บาทจ๊ะ?</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="revealStage7MoneySpeech()" class="btn-toy bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold px-3 py-1 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>กดเฉลยเสียงจำนวนเงิน</span>
+                        </button>
+                        <button onclick="generateStage7Question()" class="btn-toy bg-white text-slate-700 font-bold px-2.5 py-1 rounded-xl border-2 border-slate-300 text-xs">
+                            🔄 สุ่มใหม่
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bills & Coins Tray Display -->
+                <div id="s7-money-display" class="bg-gradient-to-b from-amber-50/80 to-emerald-50/60 border-3 border-emerald-300 rounded-2xl p-3 min-h-[125px] sm:min-h-[150px] max-h-48 overflow-y-auto flex flex-wrap items-center justify-center gap-2.5 shadow-inner">
+                </div>
+
+                <!-- Optional Reveal Text Bar -->
+                <div id="s7-reveal-banner" class="hidden bg-amber-100 border-2 border-amber-400 rounded-xl py-1 px-3 text-center text-xs sm:text-sm font-extrabold text-amber-900">
+                </div>
+
+                <!-- 4 Answer Choices (Baht Numbers) -->
+                <div id="s7-choices-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 w-full">
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- TROPHY MILESTONE CELEBRATION MODAL (50 = 1 Trophy, 100 = 2 Trophies x2 Fireworks, 150 = 3 Trophies x3 Fireworks) -->
+    <div id="trophy-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-b from-amber-50 via-white to-amber-100 border-8 border-amber-400 rounded-3xl max-w-lg w-full p-6 text-center shadow-2xl pop-item relative overflow-hidden">
+            <div class="text-xs font-extrabold uppercase tracking-widest bg-amber-400 text-amber-950 px-3 py-1 rounded-full inline-block mb-2 shadow">
+                🎆 รางวัลเกียรติยศคนเก่ง 🎆
+            </div>
+            <!-- Trophies SVG/Emoji Row -->
+            <div id="trophy-modal-cups" class="flex items-center justify-center gap-3 my-3">
+            </div>
+            <h3 id="trophy-modal-title" class="text-2xl sm:text-4xl font-extrabold text-amber-700 mb-2">
+                ยินดีด้วย! ได้รับถ้วยรางวัล!
+            </h3>
+            <p id="trophy-modal-desc" class="text-base sm:text-lg text-slate-700 font-bold mb-5">
+                หนูสะสมคะแนนครบ 50 คะแนนแล้ว เก่งมากๆ เลยจ้า!
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <button onclick="replayTrophyFireworks()" class="btn-toy bg-purple-500 hover:bg-purple-600 text-white font-bold text-base sm:text-lg px-4 py-3 rounded-2xl border-4 border-purple-700 shadow-lg flex items-center gap-2">
+                    <span>🎇 จุดพลุฉลองอีกที</span>
+                </button>
+                <button onclick="closeTrophyModal()" class="btn-toy flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg sm:text-xl py-3 rounded-2xl border-4 border-emerald-700 shadow-lg flex items-center justify-center gap-2">
+                    <span>เล่นต่อกันเลย!</span>
+                    <i class="fa-solid fa-play"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- FEEDBACK TOAST / MODAL OVERLAY -->
     <div id="feedback-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-40 p-4">
@@ -813,6 +1047,20 @@
         let walletItems = []; // Array of Thai Baht values inside wallet
         let s5TargetMission = 125;
         let currentMoneyQ = { startMoney: 20, deltaMoney: 10, answer: 30, mode: 'earn', shopItem: null };
+
+        // Stage 6 State (Number Reading & Identification up to 100,000 + Auto-advance)
+        let s6MaxPlace = 10; // 10, 100, 1000, 10000, 100000
+        let currentS6Number = 15;
+        let s6AutoTimer = null;
+
+        // Stage 7 State (Banknote & Coin Identification + Parent Range + Auto-advance)
+        let s7MaxRange = 100; // 10 (<=20), 100 (<=500), 1000 (<=5000), 10000 (<=20000)
+        let currentS7Amount = 125;
+        let s7AutoTimer = null;
+
+        // Trophy Milestone State (50 -> 1 Trophy, 100 -> 2 Trophies, 150 -> 3 Trophies)
+        let unlockedTrophyLevel = 0; // 0, 1, 2, 3
+        let lastCelebratedMultiplier = 1;
 
         // Thai Currency Denominations (Coins & Banknotes)
         const THAI_MONEY = [
@@ -899,28 +1147,58 @@
                 case 'correct':
                     // Cheerful major arpeggio
                     playTone(523.25, 'triangle', 0.15, 0, 0.22);   // C5
-                    playTone(659.25, 'triangle', 0.15, 0.12, 0.22); // E5
-                    playTone(783.99, 'triangle', 0.15, 0.24, 0.22); // G5
-                    playTone(1046.50, 'sine', 0.35, 0.36, 0.25);    // C6
-                    break;
-                case 'wrong':
-                    // Gentle cartoon wobble
-                    playTone(300, 'sawtooth', 0.18, 0, 0.12);
-                    playTone(240, 'sawtooth', 0.28, 0.15, 0.12);
+                    playTone(659.25, 'triangle', 0.15, 0.1, 0.22); // E5
+                    playTone(783.99, 'triangle', 0.15, 0.2, 0.22); // G5
+                    playTone(1046.5, 'sine', 0.35, 0.3, 0.25);     // C6
                     break;
                 case 'fanfare':
-                    const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
-                    const times = [0, 0.12, 0.24, 0.36, 0.52, 0.65];
-                    notes.forEach((n, idx) => playTone(n, 'triangle', 0.2, times[idx], 0.22));
+                    playTone(523.25, 'triangle', 0.12, 0, 0.22);
+                    playTone(659.25, 'triangle', 0.12, 0.1, 0.22);
+                    playTone(783.99, 'triangle', 0.12, 0.2, 0.22);
+                    playTone(1046.5, 'triangle', 0.4, 0.3, 0.26);
+                    break;
+                case 'wrong':
+                    playTone(220, 'sawtooth', 0.18, 0, 0.15);
+                    playTone(180, 'sawtooth', 0.25, 0.15, 0.15);
                     break;
             }
         }
 
-        // Gentle Nursery-style Background Melody
+        // Cheerful Nursery-style Background Melody (Louder & clearer triangle wave for mobile speakers)
         const BGM_MELODY = [
-            261.63, 261.63, 392.00, 392.00, 440.00, 440.00, 392.00, 0,
-            349.23, 349.23, 329.63, 329.63, 293.66, 293.66, 261.63, 0
+            { f: 523.25, d: 0.28 }, { f: 523.25, d: 0.28 }, { f: 783.99, d: 0.28 }, { f: 783.99, d: 0.28 },
+            { f: 880.00, d: 0.28 }, { f: 880.00, d: 0.28 }, { f: 783.99, d: 0.50 }, { f: 0, d: 0.2 },
+            { f: 698.46, d: 0.28 }, { f: 698.46, d: 0.28 }, { f: 659.25, d: 0.28 }, { f: 659.25, d: 0.28 },
+            { f: 587.33, d: 0.28 }, { f: 587.33, d: 0.28 }, { f: 523.25, d: 0.50 }, { f: 0, d: 0.2 }
         ];
+
+        function playSingleBGMNote() {
+            if (!bgmEnabled) return;
+            try {
+                initAudioContext();
+                const item = BGM_MELODY[bgmNoteIndex % BGM_MELODY.length];
+                if (item.f > 0 && audioCtx) {
+                    const now = audioCtx.currentTime;
+                    // Melody Oscillator (Triangle wave is much more audible on phone speakers than sine)
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(item.f, now);
+
+                    gain.gain.setValueAtTime(0.001, now);
+                    gain.gain.linearRampToWarmValue ? gain.gain.linearRampToValueAtTime(0.14, now + 0.02) : gain.gain.setValueAtTime(0.14, now + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + item.d);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + item.d + 0.02);
+                }
+                bgmNoteIndex++;
+            } catch (e) {
+                console.warn('BGM error:', e);
+            }
+        }
 
         function toggleBGM() {
             initAudioContext();
@@ -928,35 +1206,22 @@
             const btn = document.getElementById('btn-bgm');
             const label = document.getElementById('bgm-label');
 
+            if (bgmInterval) {
+                clearInterval(bgmInterval);
+                bgmInterval = null;
+            }
+
             if (bgmEnabled) {
                 btn.classList.replace('bg-pink-500', 'bg-amber-400');
                 btn.classList.replace('text-white', 'text-amber-950');
-                label.textContent = 'เปิดเพลงอยู่';
+                label.textContent = 'เพลง: เปิด';
                 bgmNoteIndex = 0;
-                bgmInterval = setInterval(() => {
-                    if (!bgmEnabled) return;
-                    const note = BGM_MELODY[bgmNoteIndex % BGM_MELODY.length];
-                    if (note > 0) {
-                        try {
-                            const osc = audioCtx.createOscillator();
-                            const gain = audioCtx.createGain();
-                            osc.type = 'sine';
-                            osc.frequency.setValueAtTime(note, audioCtx.currentTime);
-                            gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
-                            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-                            osc.connect(gain);
-                            gain.connect(audioCtx.destination);
-                            osc.start();
-                            osc.stop(audioCtx.currentTime + 0.35);
-                        } catch (e) {}
-                    }
-                    bgmNoteIndex++;
-                }, 420);
+                playSingleBGMNote(); // Play first note immediately on tap!
+                bgmInterval = setInterval(playSingleBGMNote, 360);
             } else {
                 btn.classList.replace('bg-amber-400', 'bg-pink-500');
                 btn.classList.replace('text-amber-950', 'text-white');
-                label.textContent = 'ปิดเพลง';
-                if (bgmInterval) clearInterval(bgmInterval);
+                label.textContent = 'เปิดเพลง';
             }
         }
 
@@ -1001,17 +1266,25 @@
             speakThai(lastSpokenText);
         }
 
-        // Convert number (0 - 9999) to accurate Thai reading
+        // Convert number (0 - 999,999) to accurate Thai reading (Supports up to หลักแสน 100,000+)
         function numberToThaiWords(n) {
             if (n === 0) return "ศูนย์";
             const digits = ["", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
             let result = "";
 
-            const thousands = Math.floor(n / 1000);
+            const hundredThousands = Math.floor(n / 100000);
+            const tenThousands = Math.floor((n % 100000) / 10000);
+            const thousands = Math.floor((n % 10000) / 1000);
             const hundreds = Math.floor((n % 1000) / 100);
             const tens = Math.floor((n % 100) / 10);
             const ones = n % 10;
 
+            if (hundredThousands > 0) {
+                result += digits[hundredThousands] + "แสน";
+            }
+            if (tenThousands > 0) {
+                result += digits[tenThousands] + "หมื่น";
+            }
             if (thousands > 0) {
                 result += digits[thousands] + "พัน";
             }
@@ -1028,7 +1301,7 @@
                 }
             }
             if (ones > 0) {
-                if (ones === 1 && (tens > 0 || hundreds > 0 || thousands > 0)) {
+                if (ones === 1 && n > 10) {
                     result += "เอ็ด";
                 } else {
                     result += digits[ones];
@@ -1038,22 +1311,146 @@
         }
 
         /* ----------------------------------------------------
-           4. NAVIGATION & SCORE SYSTEM
+           4. NAVIGATION, SCORE & TROPHY MILESTONE SYSTEM
+              50 pts = 1 Trophy + 1x Fireworks
+              100 pts = 2 Trophies + 2x Fireworks
+              150 pts = 3 Trophies + 3x Fireworks
         ---------------------------------------------------- */
         function addStars(amount = 1) {
+            const prevScore = totalStars;
             totalStars += amount;
             const starEl = document.getElementById('star-count');
             starEl.textContent = totalStars;
             starEl.classList.add('scale-125');
             setTimeout(() => starEl.classList.remove('scale-125'), 300);
-            launchConfetti();
+
+            // Check Trophy Milestones (50, 100, 150)
+            if (prevScore < 150 && totalStars >= 150) {
+                unlockedTrophyLevel = 3;
+                updateTrophyHeaderUI();
+                triggerTrophyCelebration(3, 150);
+            } else if (prevScore < 100 && totalStars >= 100) {
+                unlockedTrophyLevel = Math.max(unlockedTrophyLevel, 2);
+                updateTrophyHeaderUI();
+                triggerTrophyCelebration(2, 100);
+            } else if (prevScore < 50 && totalStars >= 50) {
+                unlockedTrophyLevel = Math.max(unlockedTrophyLevel, 1);
+                updateTrophyHeaderUI();
+                triggerTrophyCelebration(1, 50);
+            } else {
+                launchConfetti(1);
+            }
+        }
+
+        function addBonusScoreForParent() {
+            playSFX('pop');
+            addStars(10);
+        }
+
+        function resetTotalScore() {
+            playSFX('click');
+            totalStars = 0;
+            unlockedTrophyLevel = 0;
+            document.getElementById('star-count').textContent = '0';
+            updateTrophyHeaderUI();
+            speakThai("รีเซ็ตคะแนนสะสมเป็นศูนย์เรียบร้อยจ้า");
+        }
+
+        function updateTrophyHeaderUI() {
+            const iconsEl = document.getElementById('trophy-icons');
+            const textEl = document.getElementById('trophy-level-text');
+            if (unlockedTrophyLevel === 0) {
+                iconsEl.textContent = '🏆';
+                iconsEl.className = 'text-sm sm:text-lg tracking-tighter opacity-40';
+                textEl.textContent = `${totalStars}/50`;
+            } else {
+                iconsEl.textContent = '🏆'.repeat(unlockedTrophyLevel);
+                iconsEl.className = 'text-sm sm:text-lg tracking-tighter animate-bounce';
+                textEl.textContent = `${unlockedTrophyLevel}/3 ถ้วย`;
+            }
+        }
+
+        function triggerTrophyCelebration(trophyCount, scoreMilestone) {
+            lastCelebratedMultiplier = trophyCount;
+            // Play grand fanfare
+            playSFX('fanfare');
+            setTimeout(() => playSFX('fanfare'), 500);
+
+            // Launch fireworks with multiplier (1x, 2x, or 3x)
+            launchConfetti(trophyCount);
+
+            const cupsContainer = document.getElementById('trophy-modal-cups');
+            cupsContainer.innerHTML = '';
+            for (let i = 0; i < trophyCount; i++) {
+                const cup = document.createElement('div');
+                cup.className = "flex flex-col items-center pop-item";
+                cup.style.animationDelay = `${i * 0.15}s`;
+                cup.innerHTML = `
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-b from-yellow-200 to-amber-400 rounded-full border-4 border-amber-600 shadow-xl flex items-center justify-center text-5xl sm:text-6xl animate-bounce">
+                        🏆
+                    </div>
+                    <span class="mt-1 bg-amber-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full shadow">ถ้วยที่ ${i + 1}</span>
+                `;
+                cupsContainer.appendChild(cup);
+            }
+
+            document.getElementById('trophy-modal-title').textContent =
+                `🎉 ยินดีด้วย! ได้รับ ${trophyCount} ถ้วยรางวัล! 🎉`;
+            document.getElementById('trophy-modal-desc').textContent =
+                `หนูสะสมครบ ${scoreMilestone} คะแนนแล้ว! รับถ้วยรางวัล ${trophyCount} ใบ พร้อมพลุฉลองคูณ ${trophyCount} เท่า!`;
+
+            const modal = document.getElementById('trophy-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            speakThai(`เก่งยอดเยี่ยมที่สุดเลยจ้า สะสมคะแนนครบ ${numberToThaiWords(scoreMilestone)} คะแนน ได้รับถ้วยรางวัล ${numberToThaiWords(trophyCount)} ถ้วย พร้อมพลุฉลองสุดอลังการเลยจ้า`);
+        }
+
+        function replayTrophyFireworks() {
+            playSFX('fanfare');
+            launchConfetti(lastCelebratedMultiplier);
+        }
+
+        function closeTrophyModal() {
+            playSFX('click');
+            const modal = document.getElementById('trophy-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showTrophyInfo() {
+            playSFX('click');
+            if (unlockedTrophyLevel > 0) {
+                triggerTrophyCelebration(unlockedTrophyLevel, unlockedTrophyLevel * 50);
+            } else {
+                speakThai(`ตอนนี้มี ${numberToThaiWords(totalStars)} คะแนน สะสมให้ครบ ห้าสิบคะแนน จะได้รับถ้วยรางวัลใบแรกพร้อมพลุฉลองจ้า`);
+            }
+        }
+
+        function clearAutoTimers() {
+            if (s6AutoTimer) { clearTimeout(s6AutoTimer); s6AutoTimer = null; }
+            if (s7AutoTimer) { clearTimeout(s7AutoTimer); s7AutoTimer = null; }
+        }
+
+        function updateActiveNavTab(stageNum) {
+            for (let i = 1; i <= 7; i++) {
+                const tab = document.getElementById(`nav-tab-${i}`);
+                if (!tab) continue;
+                if (i === stageNum) {
+                    tab.className = "stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold border-2 bg-amber-400 text-amber-950 border-amber-600 shadow-sm scale-105";
+                } else {
+                    tab.className = "stage-nav-tab shrink-0 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold border-2 bg-slate-100 text-slate-700 border-slate-300 hover:bg-sky-100";
+                }
+            }
         }
 
         function goHome() {
             playSFX('click');
+            clearAutoTimers();
             currentStage = 0;
+            updateActiveNavTab(0);
             document.getElementById('screen-menu').classList.remove('hidden');
-            ['screen-stage1', 'screen-math-quiz', 'screen-stage4', 'screen-stage5'].forEach(id => {
+            ['screen-stage1', 'screen-math-quiz', 'screen-stage4', 'screen-stage5', 'screen-stage6', 'screen-stage7'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.classList.add('hidden');
@@ -1063,11 +1460,24 @@
             speakThai("เลือกด่านที่หนูๆ อยากเล่นได้เลยจ้า");
         }
 
+        /*
+           NEW STAGE ORDER (1 to 7):
+           Stage 1: นับบล็อกประจำหลัก (screen-stage1)
+           Stage 2: ทายจำนวนตัวเลข 10 - 100,000 (screen-stage6)
+           Stage 3: การบวกเลข + (screen-math-quiz)
+           Stage 4: การลบเลข - (screen-math-quiz)
+           Stage 5: เปรียบเทียบ > < = (screen-stage4)
+           Stage 6: กระเป๋าตังค์ & ทอนเงิน (screen-stage5)
+           Stage 7: ทายจำนวนเงินจากภาพ (screen-stage7)
+        */
         function startStage(stageNum) {
             playSFX('pop');
+            clearAutoTimers();
             currentStage = stageNum;
+            updateActiveNavTab(stageNum);
+
             document.getElementById('screen-menu').classList.add('hidden');
-            ['screen-stage1', 'screen-math-quiz', 'screen-stage4', 'screen-stage5'].forEach(id => {
+            ['screen-stage1', 'screen-math-quiz', 'screen-stage4', 'screen-stage5', 'screen-stage6', 'screen-stage7'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.classList.add('hidden');
@@ -1082,24 +1492,34 @@
                 setStage1Mode('explore');
                 newStage1Mission(false);
                 updateStage1UI(false);
-                speakThai("ด่านที่ 1 มารู้จักหลักหน่วย หลักสิบ หลักร้อย และหลักพันกันเถอะ ลองกดปุ่มบวกหรือลบเพื่อเพิ่มบล็อกดูสิจ๊ะ");
-            } else if (stageNum === 2 || stageNum === 3) {
+                speakThai("ด่านที่ 1 มารู้จักหลักหน่วย หลักสิบ หลักร้อย และหลักพันกันเถอะ");
+            } else if (stageNum === 2) {
+                const s6 = document.getElementById('screen-stage6');
+                s6.classList.remove('hidden');
+                s6.classList.add('flex');
+                generateStage6Question();
+            } else if (stageNum === 3 || stageNum === 4) {
                 const mq = document.getElementById('screen-math-quiz');
                 mq.classList.remove('hidden');
                 mq.classList.add('flex');
                 setupMathStageStyle(stageNum);
                 generateMathQuestion();
-            } else if (stageNum === 4) {
+            } else if (stageNum === 5) {
                 const s4 = document.getElementById('screen-stage4');
                 s4.classList.remove('hidden');
                 s4.classList.add('flex');
                 generateCompareQuestion();
-            } else if (stageNum === 5) {
+            } else if (stageNum === 6) {
                 const s5 = document.getElementById('screen-stage5');
                 s5.classList.remove('hidden');
                 s5.classList.add('flex');
                 renderDenomTray();
                 setStage5Mode('wallet');
+            } else if (stageNum === 7) {
+                const s7 = document.getElementById('screen-stage7');
+                s7.classList.remove('hidden');
+                s7.classList.add('flex');
+                generateStage7Question();
             }
         }
 
@@ -1172,6 +1592,13 @@
             placeDigits[place] = next;
             playSFX('pop');
             updateStage1UI(true);
+        }
+
+        function resetStage1Blocks() {
+            playSFX('click');
+            placeDigits = { 1000: 0, 100: 0, 10: 0, 1: 0 };
+            updateStage1UI(false);
+            speakThai("ศูนย์");
         }
 
         function getStage1Total() {
@@ -1273,6 +1700,7 @@
             s1Mode = mode;
             const tabExplore = document.getElementById('tab-s1-explore');
             const tabQuiz = document.getElementById('tab-s1-quiz');
+            const btnReset = document.getElementById('btn-s1-reset');
             const exploreGrid = document.getElementById('s1-explore-grid');
             const quizPanel = document.getElementById('s1-quiz-panel');
             const summaryCenter = document.getElementById('s1-summary-center');
@@ -1280,8 +1708,9 @@
             const quizBannerText = document.getElementById('s1-quiz-banner-text');
 
             if (mode === 'explore') {
-                tabExplore.className = "btn-toy bg-amber-400 text-amber-950 font-bold px-3 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1";
-                tabQuiz.className = "btn-toy bg-white/90 text-slate-700 font-bold px-3 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1";
+                tabExplore.className = "btn-toy bg-amber-400 text-amber-950 font-bold px-2.5 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1";
+                tabQuiz.className = "btn-toy bg-white/90 text-slate-700 font-bold px-2.5 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1";
+                if (btnReset) btnReset.classList.remove('hidden');
                 exploreGrid.classList.remove('hidden');
                 quizPanel.classList.add('hidden');
                 quizPanel.classList.remove('flex');
@@ -1290,8 +1719,9 @@
                 quizBannerText.classList.add('hidden');
                 quizBannerText.classList.remove('flex');
             } else {
-                tabQuiz.className = "btn-toy bg-amber-400 text-amber-950 font-bold px-3 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1";
-                tabExplore.className = "btn-toy bg-white/90 text-slate-700 font-bold px-3 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1";
+                tabQuiz.className = "btn-toy bg-amber-400 text-amber-950 font-bold px-2.5 py-1.5 rounded-xl border-2 border-amber-600 text-xs sm:text-sm flex items-center gap-1";
+                tabExplore.className = "btn-toy bg-white/90 text-slate-700 font-bold px-2.5 py-1.5 rounded-xl border-2 border-slate-300 text-xs sm:text-sm flex items-center gap-1";
+                if (btnReset) btnReset.classList.add('hidden');
                 exploreGrid.classList.add('hidden');
                 quizPanel.classList.remove('hidden');
                 quizPanel.classList.add('flex');
@@ -1386,7 +1816,7 @@
         }
 
         /* ----------------------------------------------------
-           6. STAGE 2 (ADDITION) & STAGE 3 (SUBTRACTION)
+           6. STAGE 3 (ADDITION) & STAGE 4 (SUBTRACTION)
         ---------------------------------------------------- */
         function setupMathStageStyle(stageNum) {
             const headerBar = document.getElementById('quiz-header-bar');
@@ -1394,17 +1824,17 @@
             const title = document.getElementById('quiz-stage-title');
             const subtitle = document.getElementById('quiz-stage-subtitle');
 
-            if (stageNum === 2) {
-                headerBar.className = "bg-white/95 rounded-3xl p-4 border-4 border-emerald-400 shadow-md flex flex-wrap items-center justify-between gap-3";
+            if (stageNum === 3) {
+                headerBar.className = "bg-white/95 rounded-2xl px-3 py-2 border-4 border-emerald-400 shadow-sm flex flex-wrap items-center justify-between gap-2";
                 icon.textContent = "🍎";
-                title.textContent = "ด่านที่ 2: สนุกกับการบวกเลข (+)";
-                title.className = "text-xl sm:text-2xl font-bold text-emerald-950";
+                title.textContent = "ด่านที่ 3: สนุกกับการบวกเลข (+)";
+                title.className = "text-base sm:text-xl font-bold text-emerald-950 leading-tight";
                 subtitle.textContent = "นำสิ่งของมารวมกัน แล้วนับดูว่ามีทั้งหมดกี่ชิ้น!";
             } else {
-                headerBar.className = "bg-white/95 rounded-3xl p-4 border-4 border-rose-400 shadow-md flex flex-wrap items-center justify-between gap-3";
+                headerBar.className = "bg-white/95 rounded-2xl px-3 py-2 border-4 border-rose-400 shadow-sm flex flex-wrap items-center justify-between gap-2";
                 icon.textContent = "🧁";
-                title.textContent = "ด่านที่ 3: สนุกกับการลบเลข (-)";
-                title.className = "text-xl sm:text-2xl font-bold text-rose-950";
+                title.textContent = "ด่านที่ 4: สนุกกับการลบเลข (-)";
+                title.className = "text-base sm:text-xl font-bold text-rose-950 leading-tight";
                 subtitle.textContent = "หักออกตามรูปที่มีกากบาท ❌ แล้วนับดูว่าเหลือกี่ชิ้น!";
             }
         }
@@ -1429,7 +1859,7 @@
             const item = CUTE_ITEMS[Math.floor(Math.random() * CUTE_ITEMS.length)];
             let num1, num2, answer;
 
-            if (currentStage === 2) {
+            if (currentStage === 3) {
                 // Addition
                 if (mathDifficulty === 'easy') {
                     num1 = Math.floor(Math.random() * 5) + 1; // 1-5
@@ -1455,18 +1885,18 @@
 
             // Update Equation Header
             document.getElementById('eq-num1').textContent = num1;
-            document.getElementById('eq-op').textContent = currentStage === 2 ? '+' : '-';
+            document.getElementById('eq-op').textContent = currentStage === 3 ? '+' : '-';
             document.getElementById('eq-num2').textContent = num2;
             const ansBox = document.getElementById('eq-ans-box');
             ansBox.textContent = '?';
-            ansBox.className = "w-16 h-16 sm:w-20 sm:h-20 bg-amber-100 border-4 border-dashed border-amber-400 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl font-extrabold text-amber-600";
+            ansBox.className = "w-12 h-12 sm:w-16 sm:h-16 bg-amber-100 border-3 border-dashed border-amber-400 rounded-xl flex items-center justify-center text-3xl sm:text-4xl font-extrabold text-amber-600";
 
             renderVisualArena();
             renderNumberLineHelper();
             renderMathChoices();
 
             // Speak Question in Friendly Thai
-            if (currentStage === 2) {
+            if (currentStage === 3) {
                 speakThai(`มี${item.name} ${numberToThaiWords(num1)}${item.unit} รวมกับอีก ${numberToThaiWords(num2)}${item.unit} เป็นทั้งหมดกี่${item.unit}จ๊ะ`);
             } else {
                 speakThai(`มี${item.name}ทั้งหมด ${numberToThaiWords(num1)}${item.unit} เอาออกไป ${numberToThaiWords(num2)}${item.unit} เหลือ${item.name}กี่${item.unit}จ๊ะ`);
@@ -1482,7 +1912,7 @@
             const { num1, num2, answer } = currentMathQ;
             const maxStep = mathDifficulty === 'easy' ? 10 : 20;
 
-            if (currentStage === 2) {
+            if (currentStage === 3) {
                 hint.textContent = `เริ่มที่ ${num1} กระโดดเดินหน้าไปอีก +${num2} ช่อง`;
             } else {
                 hint.textContent = `เริ่มที่ ${num1} กระโดดถอยหลังกลับมา -${num2} ช่อง`;
@@ -1490,10 +1920,9 @@
 
             for (let i = 0; i <= maxStep; i++) {
                 const isStart = i === num1;
-                const isInJump = currentStage === 2
+                const isInJump = currentStage === 3
                     ? (i > num1 && i <= answer)
                     : (i >= answer && i < num1);
-                const isTarget = i === answer;
 
                 let stepStyle = "bg-white text-slate-500 border-slate-300";
                 let badge = "";
@@ -1502,10 +1931,10 @@
                     stepStyle = "bg-sky-500 text-white border-sky-700 scale-105 shadow";
                     badge = "🚩";
                 } else if (isInJump) {
-                    stepStyle = currentStage === 2
+                    stepStyle = currentStage === 3
                         ? "bg-emerald-100 text-emerald-800 border-emerald-400"
                         : "bg-rose-100 text-rose-800 border-rose-400";
-                    badge = currentStage === 2 ? "➡️" : "⬅️";
+                    badge = currentStage === 3 ? "➡️" : "⬅️";
                 }
 
                 const stepEl = document.createElement('button');
@@ -1528,7 +1957,7 @@
             arena.innerHTML = '';
             const { num1, num2, item } = currentMathQ;
 
-            if (currentStage === 2) {
+            if (currentStage === 3) {
                 // Addition: Two colorful groups with a '+' sign between them
                 const wrapper = document.createElement('div');
                 wrapper.className = "flex flex-col md:flex-row items-center justify-center gap-4 w-full";
@@ -1631,9 +2060,9 @@
 
                 const ansBox = document.getElementById('eq-ans-box');
                 ansBox.textContent = answer;
-                ansBox.className = "w-16 h-16 sm:w-20 sm:h-20 bg-emerald-500 border-4 border-emerald-700 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl font-extrabold text-white pop-item";
+                ansBox.className = "w-12 h-12 sm:w-16 sm:h-16 bg-emerald-500 border-3 border-emerald-700 rounded-xl flex items-center justify-center text-3xl sm:text-4xl font-extrabold text-white pop-item";
 
-                const opWord = currentStage === 2 ? "บวก" : "ลบ";
+                const opWord = currentStage === 3 ? "บวก" : "ลบ";
                 const speechPraise = `เก่งมากๆ จ้า ${numberToThaiWords(num1)} ${opWord} ${numberToThaiWords(num2)} เท่ากับ ${numberToThaiWords(answer)}`;
                 speakThai(speechPraise);
 
@@ -1641,7 +2070,7 @@
                     showFeedbackModal(
                         '🎉',
                         'ถูกต้องนะคร้าบ!',
-                        `${num1} ${currentStage === 2 ? '+' : '-'} ${num2} = ${answer} (${numberToThaiWords(answer)}${item.unit}) รับไปเลย 1 ดาว ⭐`,
+                        `${num1} ${currentStage === 3 ? '+' : '-'} ${num2} = ${answer} (${numberToThaiWords(answer)}${item.unit}) รับไปเลย 1 คะแนน ⭐`,
                         () => generateMathQuestion()
                     );
                 }, 450);
@@ -1653,7 +2082,7 @@
         }
 
         /* ----------------------------------------------------
-           6B. STAGE 4: COMPARE NUMBERS (> , < , =)
+           6B. STAGE 5: COMPARE NUMBERS (> , < , =)
         ---------------------------------------------------- */
         function setCompareLevel(lvl) {
             playSFX('click');
@@ -1889,7 +2318,7 @@
                 }
                 newWalletMission(false);
                 updateWalletUI(false);
-                speakThai("ด่านที่ 5 มารู้จักธนบัตรและเหรียญไทยกันจ้า จิ้มที่เหรียญหรือธนบัตรด้านบนเพื่อหยอดใส่กระเป๋าตังค์ได้เลย");
+                speakThai("ด่านที่ 6 มารู้จักธนบัตรและเหรียญไทยกันจ้า จิ้มที่เหรียญหรือธนบัตรด้านบนเพื่อหยอดใส่กระเป๋าตังค์ได้เลย");
             } else {
                 walletPanel.classList.add('hidden');
                 quizPanel.classList.remove('hidden');
@@ -2140,6 +2569,300 @@
         }
 
         /* ----------------------------------------------------
+           6D. STAGE 6: NUMBER CHALLENGE (10 to 100,000)
+               Parent Place Selector + Audio Reveal + Auto-Advance
+        ---------------------------------------------------- */
+        function setStage6MaxPlace(maxPlace) {
+            playSFX('click');
+            clearAutoTimers();
+            s6MaxPlace = maxPlace;
+            const places = [10, 100, 1000, 10000, 100000];
+            places.forEach(p => {
+                const btn = document.getElementById(`s6-place-${p}`);
+                if (!btn) return;
+                if (p === maxPlace) {
+                    btn.className = "px-2 py-1 rounded-lg font-bold text-[11px] bg-amber-400 text-amber-950 shadow";
+                } else {
+                    btn.className = "px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30";
+                }
+            });
+            generateStage6Question();
+        }
+
+        function generateStage6Question() {
+            clearAutoTimers();
+            let minVal = 1;
+            let maxVal = 99;
+
+            if (s6MaxPlace === 10) {
+                minVal = 10; maxVal = 99;
+            } else if (s6MaxPlace === 100) {
+                minVal = 100; maxVal = 999;
+            } else if (s6MaxPlace === 1000) {
+                minVal = 1000; maxVal = 9999;
+            } else if (s6MaxPlace === 10000) {
+                minVal = 10000; maxVal = 99999;
+            } else if (s6MaxPlace === 100000) {
+                // Mix 100,000 up to 999,999
+                minVal = 100000; maxVal = 999999;
+            }
+
+            currentS6Number = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+
+            // Update big number display
+            const bigNumEl = document.getElementById('s6-big-number');
+            bigNumEl.textContent = currentS6Number.toLocaleString();
+            bigNumEl.classList.remove('pop-item');
+            void bigNumEl.offsetWidth;
+            bigNumEl.classList.add('pop-item');
+
+            // Render place value breakdown pills
+            renderStage6PlacePills(currentS6Number);
+
+            // Reset reveal box
+            document.getElementById('s6-reveal-text').textContent = "❓ กดปุ่มด้านบนเพื่อฟังเสียงเฉลยจ้า";
+            document.getElementById('s6-auto-status').textContent = "⚡ ตอบถูกไปข้อต่อไปอัตโนมัติ";
+
+            // Build 4 choices (Thai reading + formatting)
+            const choiceSet = new Set([currentS6Number]);
+            while (choiceSet.size < 4) {
+                const stepPower = Math.max(1, Math.floor(s6MaxPlace / 10));
+                const delta = (Math.floor(Math.random() * 5) + 1) * stepPower;
+                const cand = Math.random() < 0.5 ? currentS6Number + delta : Math.max(1, currentS6Number - delta);
+                choiceSet.add(cand);
+            }
+            const choices = Array.from(choiceSet).sort((a, b) => a - b);
+
+            const container = document.getElementById('s6-choices-container');
+            container.innerHTML = '';
+            const colors = [
+                'bg-indigo-500 hover:bg-indigo-600 border-indigo-700',
+                'bg-sky-500 hover:bg-sky-600 border-sky-700',
+                'bg-emerald-500 hover:bg-emerald-600 border-emerald-700',
+                'bg-purple-500 hover:bg-purple-600 border-purple-700'
+            ];
+
+            choices.forEach((val, idx) => {
+                const words = numberToThaiWords(val);
+                const btn = document.createElement('button');
+                btn.className = `btn-toy ${colors[idx % colors.length]} text-white py-2.5 px-3 rounded-2xl border-3 flex flex-col items-center justify-center shadow-md`;
+                btn.innerHTML = `
+                    <span class="text-sm sm:text-lg font-extrabold leading-snug">${words}</span>
+                    <span class="text-xs sm:text-sm font-bold opacity-90 bg-black/20 px-2 py-0.5 rounded-lg mt-1">${val.toLocaleString()}</span>
+                `;
+                btn.onclick = () => checkStage6Answer(val, btn);
+                container.appendChild(btn);
+            });
+
+            speakThai("ตัวเลขนี้คือจำนวนเท่าไหร่เอ่ย กดปุ่มสีเหลืองเพื่อฟังเสียงเฉลย หรือกดเลือกคำตอบด้านล่างได้เลยจ้า");
+        }
+
+        function renderStage6PlacePills(num) {
+            const pillsEl = document.getElementById('s6-place-pills');
+            pillsEl.innerHTML = '';
+            const placeConfig = [
+                { div: 100000, name: 'แสน', bg: 'bg-rose-100 text-rose-800 border-rose-300' },
+                { div: 10000,  name: 'หมื่น', bg: 'bg-orange-100 text-orange-800 border-orange-300' },
+                { div: 1000,   name: 'พัน',  bg: 'bg-purple-100 text-purple-800 border-purple-300' },
+                { div: 100,    name: 'ร้อย', bg: 'bg-pink-100 text-pink-800 border-pink-300' },
+                { div: 10,     name: 'สิบ',  bg: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+                { div: 1,      name: 'หน่วย', bg: 'bg-amber-100 text-amber-800 border-amber-300' }
+            ];
+
+            placeConfig.forEach(p => {
+                if (num >= p.div) {
+                    const digit = Math.floor(num / p.div) % 10;
+                    const pill = document.createElement('span');
+                    pill.className = `text-[10px] sm:text-xs font-extrabold px-2 py-0.5 rounded-lg border ${p.bg}`;
+                    pill.textContent = `หลัก${p.name}: ${digit}`;
+                    pillsEl.appendChild(pill);
+                }
+            });
+        }
+
+        function revealStage6NumberSpeech() {
+            playSFX('pop');
+            const words = numberToThaiWords(currentS6Number);
+            const revealEl = document.getElementById('s6-reveal-text');
+            revealEl.textContent = `🔊 ${currentS6Number.toLocaleString()} (${words})`;
+            // Speak ONLY the number itself as requested
+            speakThai(words);
+        }
+
+        function checkStage6Answer(selected, btnEl) {
+            if (s6AutoTimer) return; // Prevent double click while advancing
+            if (selected === currentS6Number) {
+                playSFX('correct');
+                const prevLevel = unlockedTrophyLevel;
+                addStars(1); // +1 point per correct answer consistently across all stages
+
+                const words = numberToThaiWords(currentS6Number);
+                btnEl.className = "btn-toy bg-emerald-500 text-white py-2.5 px-3 rounded-2xl border-4 border-yellow-300 flex flex-col items-center justify-center shadow-xl scale-105";
+                document.getElementById('s6-reveal-text').textContent = `✅ ถูกต้อง! ${currentS6Number.toLocaleString()} (${words})`;
+                document.getElementById('s6-auto-status').textContent = "⏳ เก่งมาก! กำลังไปข้อต่อไปอัตโนมัติ...";
+
+                if (unlockedTrophyLevel === prevLevel) {
+                    speakThai(`ถูกต้องจ้า ${words}`);
+                }
+
+                // Auto-advance to next question
+                s6AutoTimer = setTimeout(() => {
+                    s6AutoTimer = null;
+                    generateStage6Question();
+                }, 1500);
+            } else {
+                playSFX('wrong');
+                btnEl.classList.add('shake-anim', 'opacity-60');
+                speakThai(`ยังไม่ใช่นะจ๊ะ ลองกดปุ่มเฉลยเพื่อฟังเสียงดูสิจ๊ะ`);
+            }
+        }
+
+        /* ----------------------------------------------------
+           6E. STAGE 7: BANKNOTES & COINS COUNTING QUIZ
+               Parent Range Selector + Visual Money + Auto-Advance
+        ---------------------------------------------------- */
+        function setStage7MaxRange(rangeVal) {
+            playSFX('click');
+            clearAutoTimers();
+            s7MaxRange = rangeVal;
+            const ranges = [10, 100, 1000, 10000];
+            ranges.forEach(r => {
+                const btn = document.getElementById(`s7-range-${r}`);
+                if (!btn) return;
+                if (r === rangeVal) {
+                    btn.className = "px-2 py-1 rounded-lg font-bold text-[11px] bg-amber-400 text-amber-950 shadow";
+                } else {
+                    btn.className = "px-2 py-1 rounded-lg font-bold text-[11px] bg-white/15 text-white hover:bg-white/30";
+                }
+            });
+            generateStage7Question();
+        }
+
+        function generateStage7Question() {
+            clearAutoTimers();
+            let amount = 0;
+
+            if (s7MaxRange === 10) {
+                // Coins focus: 2 to 25 Baht
+                amount = Math.floor(Math.random() * 24) + 2;
+            } else if (s7MaxRange === 100) {
+                // Bills & coins: 20 to 495 Baht
+                const bills = (Math.floor(Math.random() * 9) + 1) * 50;
+                const coins = [0, 5, 10, 12, 15, 25, 30][Math.floor(Math.random() * 7)];
+                amount = Math.min(495, Math.max(25, bills + coins));
+            } else if (s7MaxRange === 1000) {
+                // Thousands + Hundreds + Coins: 500 to 4,850 Baht
+                const thou = (Math.floor(Math.random() * 4) + 1) * 1000;
+                const hund = [0, 100, 200, 500, 600, 700][Math.floor(Math.random() * 6)];
+                const small = [0, 10, 20, 50, 70, 5, 15][Math.floor(Math.random() * 7)];
+                amount = thou + hund + small;
+            } else {
+                // Ten Thousands: 5,000 to 15,500 Baht (uses x1000 bundles + bills)
+                const thou = (Math.floor(Math.random() * 11) + 5) * 1000;
+                const hund = [0, 200, 500, 700, 100][Math.floor(Math.random() * 5)];
+                const coins = [0, 10, 20, 50][Math.floor(Math.random() * 4)];
+                amount = thou + hund + coins;
+            }
+
+            currentS7Amount = amount;
+
+            const banner = document.getElementById('s7-reveal-banner');
+            banner.classList.add('hidden');
+            document.getElementById('s7-prompt-text').textContent =
+                "นับธนบัตรและเหรียญด้านล่างว่ามีเงินรวมกันทั้งหมดกี่บาทจ๊ะ?";
+
+            // Render visual bills & coins
+            const display = document.getElementById('s7-money-display');
+            display.innerHTML = '';
+            const moneyParts = decomposeBaht(amount);
+
+            moneyParts.forEach((val, idx) => {
+                const itemBtn = document.createElement('button');
+                itemBtn.type = "button";
+                itemBtn.className = "hover:scale-110 active:scale-95 transition-transform";
+                itemBtn.innerHTML = createThaiMoneySVG(val, 'normal');
+                itemBtn.onclick = () => {
+                    playSFX('pop');
+                    const info = THAI_MONEY.find(m => m.val === val);
+                    speakThai(info ? info.label : `${numberToThaiWords(val)}บาท`);
+                };
+                display.appendChild(itemBtn);
+            });
+
+            // Build 4 answer choices
+            const choiceSet = new Set([currentS7Amount]);
+            while (choiceSet.size < 4) {
+                let step = 5;
+                if (s7MaxRange === 10) step = [1, 2, 5][Math.floor(Math.random() * 3)];
+                else if (s7MaxRange === 100) step = [10, 20, 50, 100][Math.floor(Math.random() * 4)];
+                else if (s7MaxRange === 1000) step = [100, 200, 500, 1000][Math.floor(Math.random() * 4)];
+                else step = [500, 1000, 2000][Math.floor(Math.random() * 3)];
+
+                const cand = Math.random() < 0.5 ? currentS7Amount + step : Math.max(1, currentS7Amount - step);
+                choiceSet.add(cand);
+            }
+            const choices = Array.from(choiceSet).sort((a, b) => a - b);
+
+            const choicesContainer = document.getElementById('s7-choices-container');
+            choicesContainer.innerHTML = '';
+            const btnThemes = [
+                'bg-emerald-600 hover:bg-emerald-700 border-emerald-800',
+                'bg-teal-600 hover:bg-teal-700 border-teal-800',
+                'bg-sky-600 hover:bg-sky-700 border-sky-800',
+                'bg-indigo-600 hover:bg-indigo-700 border-indigo-800'
+            ];
+
+            choices.forEach((c, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `btn-toy ${btnThemes[idx % btnThemes.length]} text-white py-2.5 px-3 rounded-2xl border-3 flex flex-col items-center justify-center shadow-md`;
+                btn.innerHTML = `
+                    <span class="text-xl sm:text-2xl font-extrabold">${c.toLocaleString()} บาท</span>
+                    <span class="text-[11px] sm:text-xs font-bold opacity-90 mt-0.5">${numberToThaiWords(c)}บาท</span>
+                `;
+                btn.onclick = () => checkStage7Answer(c, btn);
+                choicesContainer.appendChild(btn);
+            });
+
+            speakThai("ดูภาพธนบัตรและเหรียญ แล้วเลือกจำนวนเงินที่ถูกต้องได้เลยจ้า");
+        }
+
+        function revealStage7MoneySpeech() {
+            playSFX('pop');
+            const words = numberToThaiWords(currentS7Amount);
+            const banner = document.getElementById('s7-reveal-banner');
+            banner.classList.remove('hidden');
+            banner.textContent = `🔊 เฉลย: ${currentS7Amount.toLocaleString()} บาท (${words}บาท)`;
+            speakThai(`${words}บาท`);
+        }
+
+        function checkStage7Answer(selected, btnEl) {
+            if (s7AutoTimer) return;
+            if (selected === currentS7Amount) {
+                playSFX('correct');
+                const prevLevel = unlockedTrophyLevel;
+                addStars(1); // +1 point per correct answer consistently
+
+                const words = numberToThaiWords(currentS7Amount);
+                btnEl.className = "btn-toy bg-amber-400 text-amber-950 py-2.5 px-3 rounded-2xl border-4 border-amber-700 flex flex-col items-center justify-center shadow-xl scale-105";
+                document.getElementById('s7-prompt-text').textContent =
+                    `✅ ถูกต้องจ้า! ${currentS7Amount.toLocaleString()} บาท (${words}บาท) กำลังไปข้อต่อไปอัตโนมัติ...`;
+
+                if (unlockedTrophyLevel === prevLevel) {
+                    speakThai(`เก่งมากจ้า ${words}บาท`);
+                }
+
+                s7AutoTimer = setTimeout(() => {
+                    s7AutoTimer = null;
+                    generateStage7Question();
+                }, 1500);
+            } else {
+                playSFX('wrong');
+                btnEl.classList.add('shake-anim', 'opacity-60');
+                speakThai(`เอ๊ะ ${numberToThaiWords(selected)}บาท ยังไม่ใช่นะจ๊ะ ลองจิ้มที่ธนบัตรหรือเหรียญเพื่อนับดูใหม่นะ`);
+            }
+        }
+
+        /* ----------------------------------------------------
            7. FEEDBACK MODAL & CONFETTI CELEBRATION
         ---------------------------------------------------- */
         let pendingNextCallback = null;
@@ -2178,24 +2901,36 @@
         }
         window.addEventListener('resize', resizeConfettiCanvas);
 
-        function launchConfetti() {
+        function launchConfetti(multiplier = 1) {
             resizeConfettiCanvas();
-            const colors = ['#f43f5e', '#fbbf24', '#34d399', '#38bdf8', '#a855f7', '#fb923c'];
-            for (let i = 0; i < 65; i++) {
-                confettiParticles.push({
-                    x: window.innerWidth / 2,
-                    y: window.innerHeight / 2,
-                    vx: (Math.random() - 0.5) * 16,
-                    vy: (Math.random() - 0.8) * 16 - 4,
-                    size: Math.random() * 10 + 6,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    rotation: Math.random() * 360,
-                    vRot: (Math.random() - 0.5) * 12
-                });
-            }
-            if (!confettiAnimating) {
-                confettiAnimating = true;
-                requestAnimationFrame(updateConfetti);
+            const colors = ['#f43f5e', '#fbbf24', '#34d399', '#38bdf8', '#a855f7', '#fb923c', '#fde047'];
+            const burstCount = Math.max(1, multiplier);
+
+            for (let b = 0; b < burstCount; b++) {
+                setTimeout(() => {
+                    const originX = burstCount === 1
+                        ? window.innerWidth / 2
+                        : (window.innerWidth * (b + 1)) / (burstCount + 1);
+                    const originY = window.innerHeight * 0.45;
+                    const count = 65 * multiplier;
+
+                    for (let i = 0; i < count; i++) {
+                        confettiParticles.push({
+                            x: originX,
+                            y: originY,
+                            vx: (Math.random() - 0.5) * (16 + multiplier * 3),
+                            vy: (Math.random() - 0.85) * (16 + multiplier * 3) - 4,
+                            size: Math.random() * 10 + 6,
+                            color: colors[Math.floor(Math.random() * colors.length)],
+                            rotation: Math.random() * 360,
+                            vRot: (Math.random() - 0.5) * 14
+                        });
+                    }
+                    if (!confettiAnimating) {
+                        confettiAnimating = true;
+                        requestAnimationFrame(updateConfetti);
+                    }
+                }, b * 320);
             }
         }
 
